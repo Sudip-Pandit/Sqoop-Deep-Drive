@@ -1,7 +1,9 @@
 # Sqoop-Deep-Drive
+
 I tried to put all the real time Real Time Sqoop Commands in this repository.
-===========Sqoop Commands=========
- Help: This can be used to get help related to Sqoop commands.
+
+Help Command
+Help: This can be used to get help related to Sqoop commands.
  
 Example 1: sqoop help
 
@@ -11,10 +13,10 @@ Example 3: sqoop help export
 
 Example 4: sqoop help eva
 
-=========
+===
 List Database: 
 The following command display all the databases present.
-=========
+====
 sqoop list-databases \
 --connect jdbc:mysql://localhost:3306 \
 --username root \
