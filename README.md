@@ -13,10 +13,9 @@ Example 3: sqoop help export
 
 Example 4: sqoop help eva
 
-===
-List Database: 
+# List Database: 
 The following command display all the databases present.
-====
+
 sqoop list-databases \
 --connect jdbc:mysql://localhost:3306 \
 --username root \
