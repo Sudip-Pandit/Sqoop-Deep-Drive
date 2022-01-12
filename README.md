@@ -30,7 +30,8 @@ sqoop list-tables \
 --username root \
 --password <>
   
-==========
+====
+
 EVAL: 
 Eval can be used to run adhoc queries such as Select, Insert, delete & update in Database. 
 demo_db can be changed with required DB name and any database query can be specified after "--query".
@@ -41,7 +42,8 @@ sqoop eval \
 --driver com.mysql.cj.jdbc.Driver \
 --query "SELECT * FROM order_items LIMIT 5"
   
- ==========
+ ====
+ 
 How to import-all-tables?
 1) The following command is used to import all the tables present in the database in one shot.
 2) "--warehouse-dir" need to be used when importing all the tables.
@@ -53,7 +55,7 @@ sqoop import-all-tables \
 --autoreset-to-one-mapper \
 --warehouse-dir all_table_import
 
-===========
+====
 ==> How to exclude the unused tables while importing?
 In order to exclude the tables left in the database and only import the used tables, the 
 following command need to use:
@@ -67,7 +69,7 @@ following command need to use:
 --warehouse-dir all_table_import1 \
 --exclude-tables "order_items_wp,orders_sqoop,orders_new,orders,orders_wp"
 
-===========
+====
 CodeGen:
  
 This command can be used to generate java code which will be used by Sqoop to import/export data. 
@@ -80,19 +82,25 @@ sqoop codegen \
 --driver com.mysql.cj.jdbc.Driver \
 --table order_items
  
-============
+=====
 Sqoop Import Data File Formats
  => You can import the output file in the following file format types:
  
 --as-textfile        This is default and will import data as plain text
+
 --as-avrodatafile    This will import data to Avro data files
+
 --as-parquetfile     This will Import data to Parquet files
+
 --as-sequencefile    This will import data to SequenceFiles
 
-==============
+
+====
+
 → Simple Import: 
 In sqoop by default data is delimited by comma (,) if not specified. But we can specify the file delimited.
-==============
+
+====
 sqoop import  \
  --connect jdbc:mysql://localhost:3306/retail_db \
  --username root \
@@ -101,7 +109,8 @@ sqoop import  \
  --table order_items \
  --target-dir hdfs://localhost:9000/user/username/scoop_import
 
-==============
+====
+
 → Import with Delimter: 
 "--fields-terminated-by" can be used to specify specific delimiter for the imported data. 
 In the below example, pipe(|) is used as delimiter.
@@ -116,7 +125,9 @@ In the below example, pipe(|) is used as delimiter.
  --delete-target-dir \
  --bindir $SQOOP_HOME/lib/ \
  -m 1
-===============
+ 
+ 
+====
 
 → Import With Delete: 
 "--delete-target-dir" argument can be used to delete target HDFS directory(if exists) before importing data.
@@ -131,9 +142,10 @@ sqoop import \
 --bindir $SQOOP_HOME/lib/ \
 -m 1
 
-==============
+====
 → Import With Append: 
 "--append" argument can be used to append imported data to the existing HDFS directory
+
 sqoop import  \
 --connect jdbc:mysql://localhost:3306/retail_db \
 --username root \
@@ -145,11 +157,13 @@ sqoop import  \
 --bindir $SQOOP_HOME/lib/ \
 --append
 
-==============
+====
+
 → Import Without Primary Key: 
 There are 2 ways to import data from tables which don't have primary keys defined.
 
 Option 1:
+
 sqoop import \
 --connect jdbc:mysql://localhost:3306/retail_db \
 --username root \
@@ -160,7 +174,10 @@ sqoop import \
 --bindir $SQOOP_HOME/lib/ \
 -m 1
 
-Option 2: By instructing Sqoop to use particular column for breaking the data using "--split-by" argument.
+Option 2:
+
+By instructing Sqoop to use particular column for breaking the data using "--split-by" argument.
+
 sqoop import \
 --connect jdbc:mysql://localhost:3306/retail_db \
 --username root \
@@ -182,9 +199,12 @@ Generic Arguments to import command
 
 --delete-target-dir (This is used to delete target HDFS directory(if already exist) before importing data)
 
-==============
+====
+
 → Import Specific columns:
+
 "--columns" argument can be used to import specific columns.
+
 sqoop import  \
 --connect jdbc:mysql://localhost:3306/retail_db \
 --username root \
@@ -195,10 +215,16 @@ sqoop import  \
 --target-dir hdfs://localhost:9000/user/username/scoop_import/partial_column_orders \
 --bindir $SQOOP_HOME/lib/
 
-==============
-→ Import with Query: " --query" attribute can be used to import with the given query.
+====
+
+→ Import with Query:
+
+" --query" attribute can be used to import with the given query.
+
 Sqoop import with query will fail if $CONDITIONS' is not specified in Where condition. 
+
 "--query" and "--table" attributes cannot be used together.
+
 sqoop import  \
 --connect jdbc:mysql://localhost:3306/retail_db \
 --username root \
@@ -209,13 +235,18 @@ sqoop import  \
 --bindir $SQOOP_HOME/lib/ \
 --split-by order_id
 
-===============
-→ Import Data with Nulls: 
+====
+→ Import Data with Nulls:
+
 If nulls are not handled properly then column with null data will be fetched and it will be import as 'null' String. 
+
 There are different arguments to handle nulls in String and number. 
+
 Both "--null-string" & "--null-non-string" clauses can be used in a single import.
+
 Example 1: If nulls are not handled then it will give output like below.
-  sqoop import  \
+ 
+ sqoop import  \
  --connect jdbc:mysql://localhost:3306/retail_db \
  --username root \
  --password mysqlrootpassword \
@@ -232,10 +263,14 @@ CLOSED,101
 null,102
 
 Example 2: 
+
 "--null-string" argument can be used to handle NULLs in string. 
+
 In the below example, null is being replaced with blank string.
+
 Example 2: "--null-string" argument can be used to handle NULLs in string. In the below example, null is being replaced with blank string.
-  sqoop import  \
+  
+ sqoop import  \
  --connect jdbc:mysql://localhost:3306/retail_db \
  --username root \
  --password mysqlrootpassword \
@@ -246,7 +281,9 @@ Example 2: "--null-string" argument can be used to handle NULLs in string. In th
  --split-by order_id \
  --null-string ''
  
- Example 3: "--null-non-string" argument can be used to handle NULLs in numeric fields. In the below example, null is being replaced with -1.
+ Example 3: 
+ 
+ "--null-non-string" argument can be used to handle NULLs in numeric fields. In the below example, null is being replaced with -1.
   sqoop import  \
  --connect jdbc:mysql://localhost:3306/retail_db \
  --username root \
@@ -259,11 +296,16 @@ Example 2: "--null-string" argument can be used to handle NULLs in string. In th
  --null-non-string -1
 
 
-=================
+====
+
 → Import With WHERE Clause:
+
 The same way where clasue do work in sqoop as well.
-"--where" argument can be used to filter data from table during import. 
+
+"--where" argument can be used to filter data from table during import.
+
 In the below example, where clause is used to fetch only sep_id with values 10,20,30,40"
+
 sqoop import  \
  --connect jdbc:mysql://localhost:3306/retail_db \
  --username root \
@@ -274,10 +316,13 @@ sqoop import  \
  --target-dir hdfs://localhost:9000/user/username/scoop_import/partial_column_where \
  --bindir $SQOOP_HOME/lib/ 
 
-===============
+====
+
 → Import as Avro File: 
+
 In order to import the data file format in avro, "--as-avrodatafile" argument can be used to import data in Avro data format.
- sqoop import  \
+ 
+  sqoop import  \
  --connect jdbc:mysql://localhost:3306/retail_db \
  --username root \
  --password <> \
@@ -286,8 +331,10 @@ In order to import the data file format in avro, "--as-avrodatafile" argument ca
  --target-dir hdfs://localhost:9000/user/username/scoop_import/avro \
  --as-avrodatafile
 
-================
+====
+
 → Import with append:
+
 sqoop import  \
  --connect jdbc:mysql://localhost:3306/retail_db \
  --username root \
@@ -299,16 +346,24 @@ sqoop import  \
  --bindir $SQOOP_HOME/lib/ \
 --append
 
-==============
+====
 → Import with compression:
+
 As we can compressed the file.
+
 The snappy compression is good way to compress the file. 
+
 There are many compression techniques such as Gzip, Snappy & Bzip.
 
-Gzip: Compress imported data as gunzip.
+Gzip: 
+
+Compress imported data as gunzip.
+
 All the three import examples below are same 
+
 where " --compress", "--compression-codec Gzip" and "--compression-codec org.apache.hadoop.io.compress.GzipCodec" is used to create gunzip file.
-  sqoop import  \
+ 
+ sqoop import  \
  --connect jdbc:mysql://localhost:3306/retail_db \
  --username root \
  --password mysqlroot \
