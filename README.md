@@ -21,17 +21,14 @@ sqoop list-databases \
 --username root \
 --password <>
 
-=========
-List tables:-
+# List tables
 It displays all the tables present in "abc" database. abc can be changed with required DB name.
 sqoop list-tables \
 --connect jdbc:mysql://localhost:3306/demo_db \
 --username root \
 --password <>
   
-====
-
-EVAL: 
+# EVAL
 Eval can be used to run adhoc queries such as Select, Insert, delete & update in Database. 
 demo_db can be changed with required DB name and any database query can be specified after "--query".
 sqoop eval \
