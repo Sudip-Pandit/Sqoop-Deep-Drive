@@ -364,3 +364,141 @@ sqoop import  \
  --target-dir hdfs://localhost:9000/user/username/scoop_import/avro_zip \
  --append \
  --compression-codec org.apache.hadoop.io.compress.GzipCodec
+ 
+ # Sqoop Hive Import
+ Sqoop is a best tool in data ingestion, which can be used to import data to Hive tables.
+ => --hive-import 
+ => --hive-database (Specify the hive database where hive tables got reside in there)
+ => --hive-table (Specify the table in hive where data get extracted to RDBMS)
+ => --hive-overwrite (Specify to overwrite existing hive table where data need to be imported)
+ => --map-column-hive (This attribute is used to specify column names and datatypes for the custom hive import)
+ 
+ # Hive Import
+ sqoop import  \
+ --connect jdbc:mysql://localhost:3306/retail_db \
+ --username root \
+ --password mysqlrootpassword \
+ --driver com.mysql.cj.jdbc.Driver \
+ --table orders \
+ --hive-import \
+ --hive-database retail \
+ --hive-table orders_hive 
+ 
+ # Hive Table Overwrite
+  sqoop import  \
+ --connect jdbc:mysql://localhost:3306/retail_db \
+ --username root \
+ --password mysqlrootpassword \
+ --driver com.mysql.cj.jdbc.Driver \
+ --table order_items \
+ --hive-import \
+ --hive-database retail \
+ --hive-table order_items_hive \
+ --hive-overwrite \
+ -m 1
+ 
+ # How to import custom columns in Hive?
+ sqoop import  \
+ --connect jdbc:mysql://localhost:3306/retail_db \
+ --username root \
+ --password mysqlrootpassword \
+ --driver com.mysql.cj.jdbc.Driver \
+ --table orders \
+ --columns order_status,order_id,order_date \
+ --bindir $SQOOP_HOME/lib/ \
+ --split-by order_id \
+ --hive-import \
+ --hive-database retail \
+ --hive-table orders_hive_1 \
+ --map-column-hive "order_status=STRING,order_id=INT,order_date=STRING"
+ 
+ # Sqoop EXPORT
+ Sqoop can be used to export from Hadoop Distriutributed File System (HDFS) into RDBMS
+ The following are the conditions:
+ 1. Sqoop simple export command
+ 2. Sqoop export with delimited file
+ 3. Sqoop export only the specific columns
+ 4. Sqoop with update only and export with upsert
+
+# Commands/Simple Export command
+sqoop export \
+ --connect jdbc:mysql://localhost:3306/retail_db \
+ --username root \
+ --password mysqlrootpassword \
+ --driver com.mysql.cj.jdbc.Driver \
+ --table order_items \
+ --export-dir hdfs://localhost:9000/user/username/retail_db/order_items
+ 
+ # Sqoop export from Delimited File:
+ sqoop export \
+ --connect jdbc:mysql://localhost:3306/retail_db \
+ --username root \
+ --password mysqlrootpassword \
+ --driver com.mysql.cj.jdbc.Driver \
+ --table order_items \
+ --export-dir hdfs://localhost:9000/user/username/retail_db/order_items
+ --input-fields-terminated-by "\003"
+ 
+ # Export specific columns
+ sqoop export \
+ --connect jdbc:mysql://localhost:3306/retail_db \
+ --username root \
+ --password mysqlrootpassword \
+ --driver com.mysql.cj.jdbc.Driver \
+ --table daily_revenue_demo \
+ --export-dir hdfs://localhost:9000/user/hive/warehouse/daily_revenue.db/daily_revenue_txt \
+ --bindir $SQOOP_HOME/lib/ \
+ --columns order_date,revenue
+ 
+ # Export with only update
+ sqoop export \
+  --connect jdbc:mysql://localhost:3306/retail_db \
+  --username root \
+  --password mysqlrootpassword \
+  --driver com.mysql.cj.jdbc.Driver \
+  --table orders \
+  --export-dir hdfs://localhost:9000/user/username/retail_db/orders \
+  --bindir $SQOOP_HOME/lib/ \
+  --update-key order_id
+  
+  # Export with Upsert
+  sqoop export \
+ --connect jdbc:mysql://localhost:3306/retail_db \
+ --username root \
+ --password mysqlrootpassword \
+ --table orders \
+ --export-dir hdfs://localhost:9000/user/username/retail_db/orders \
+ --bindir $SQOOP_HOME/lib/ \
+ --update-key order_id \
+ --update-mode allowinsert
+ 
+ # Sqoop Data with Nulls
+ sqoop export \
+ --connect jdbc:mysql://localhost:3306/retail_db \
+ --username root \
+ --password mysqlrootpassword \
+ --driver com.mysql.cj.jdbc.Driver \
+ --table order_export_null_test \
+ --export-dir hdfs://localhost:9000/user/username/scoop_import/query_orders_null/part-m-00000 \
+ --input-fields-terminated-by "," \
+ --bindir $SQOOP_HOME/lib/ \
+ --input-null-string "" \
+ --input-null-non-string "100" 
+ 
+ # Export Hive table
+ sqoop export \
+ --connect jdbc:mysql://localhost:3306/retail_db \
+ --username root \
+ --password mysqlrootpassword \
+ --driver com.mysql.cj.jdbc.Driver \
+ --table orders_sqoop \
+ --bindir $SQOOP_HOME/lib/ \
+ --hcatalog-database retail \
+ --hcatalog-table orders_hive 
+ 
+ 
+ 
+
+
+ 
+ 
